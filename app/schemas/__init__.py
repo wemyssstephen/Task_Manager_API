@@ -1,1 +1,1 @@
-from .task import TaskBase, CreateTaskRequest, TaskResponse
+from .task import TaskBase, CreateTaskRequest, TaskResponse, UpdateTaskRequest
