@@ -27,5 +27,11 @@ def get_uncompleted_tasks(db: Session = Depends(get_db)):
     tasks = db.query(models.TaskModel).filter(models.TaskModel.is_completed == False).all()
     return tasks
 
+@app.get("/tasks/completed/", summary="List Completed Tasks", response_model=list[schemas.TaskResponse])
+def get_completed_tasks(db: Session = Depends(get_db)):
+    # Retrieves all completed tasks
+    tasks = db.query(models.TaskModel).filter(models.TaskModel.is_completed == True).all()
+    return tasks
+
 async def root():
     return {"message": "Task Management API"}
