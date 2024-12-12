@@ -8,7 +8,7 @@ from . import models, schemas
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
-@app.post("/tasks/", summary="Create a New Task",response_model=schemas.TaskResponse)
+@app.post("/tasks/", summary="Create a New Task",response_model=schemas.TaskResponse, status_code=201)
 def create_task(task: schemas.CreateTaskRequest, db: Session = Depends(get_db)):
     # Creates a new line
     db_task = models.TaskModel(**task.model_dump())
@@ -51,6 +51,15 @@ def update_task(task_id: int, task_update: schemas.UpdateTaskRequest, db: Sessio
     db.commit()
     db.refresh(db_task)
     return db_task
+
+@app.delete("/tasks/{task_id}", summary="Delete Task", status_code=204)
+def delete_task(task_id: int, db: Session = Depends(get_db)):
+    db_task = db.query(models.TaskModel).filter(models.TaskModel.id == task_id).first()
+    if not db_task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    db.delete(db_task)
+    db.commit()
+    return None
 
 async def root():
     return {"message": "Task Management API"}
