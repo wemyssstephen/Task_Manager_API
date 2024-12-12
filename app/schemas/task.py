@@ -4,8 +4,16 @@ from datetime import datetime
 
 class TaskBase(BaseModel):
     # Fields that are common to both creation and responses
-    title: str
-    description: Optional[str] = None
+    title: str = Field(
+        min_length=1,
+        max_length=100,
+        description="The title of task"
+    )
+    description: Optional[str] = Field(
+        None,
+        max_length=1000,
+        description="Detailed description of task"
+    )
     is_completed: bool = False
 
 class CreateTaskRequest(TaskBase):
