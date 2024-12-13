@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 from datetime import datetime
 
@@ -28,9 +28,7 @@ class UpdateTaskRequest(BaseModel):
 class TaskResponse(TaskBase):
     """This task class defines how the data looks in my API and handles data validation."""
     # Has all fields from TaskBase plus the below:
+    model_config = ConfigDict(from_attributes=True)
     id: int
     created_at: datetime
-
-    class Config:
-        orm_mode = True
 
